@@ -1,0 +1,10 @@
+{
+	"authors": [
+		"Javidx9",
+		"Doigt"
+	],
+	"copyright": "Copyright (c) 2018 Javidx9",
+	"description": "D port of olcConsoleGameEngine",
+	"license": "One Lone Coder License",
+	"name": "cge-d"
+}
