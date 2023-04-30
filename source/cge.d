@@ -112,7 +112,7 @@ class Sprite
     
     this (string file)
     {
-        if (!load(file)) Create(8, 8);
+        if (!load(file)) create(8, 8);
     }
     
     int width, height;
@@ -121,7 +121,6 @@ class Sprite
     {
         char[] glyphs;
         short[] colours;
-        short[] bgColours;
         
         void create(int w, int h)
         {
@@ -132,7 +131,6 @@ class Sprite
             
             glyphs = new char[](length);
             colours = new short[](length);
-            bgColours = new short[](length);
             
             for (int i; i < length; ++i)
                 glyphs[i] = ' ';
@@ -155,14 +153,6 @@ class Sprite
         colours[y * width + x] = c;
     }
     
-    void setBGColour(int x, int y, short c)
-    {
-        if (x < 0 || x >= width || y < 0 || y >= height) 
-            return;
-            
-        bgColours[y * width + x] = c;
-    }
-    
     auto getGlyph(int x, int y)
     {
         if (x < 0 || x >= width || y < 0 || y >= height) 
@@ -177,14 +167,6 @@ class Sprite
             return BLACK;
             
         return colours[y * width + x];
-    }
-    
-    auto getBGColour(int x, int y)
-    {
-        if (x < 0 || x >= width || y < 0 || y >= height) 
-            return BLACK;
-            
-        return bgColours[y * width + x];
     }
     
     auto sampleGlyph(float x, float y)
@@ -209,21 +191,9 @@ class Sprite
         return colours[sy * width + sx];
     }
     
-    auto sampleBGColour(float x, float y)
-    {
-        int sx = cast(int)(x * cast(float)width),
-            sy = cast(int)(y * cast(float)height - 1f);
-            
-        if (sx < 0 || sx >= width || sy < 0 || sy >= height)
-            return BLACK;
-            
-        return bgColours[sy * width + sx];
-    }
-    
     auto save(string fileName)
     {
         auto file = File(fileName, "wb");
-        
         if (!file) return false;
         
         file.rawWrite(to!ubyte(width));
@@ -231,13 +201,24 @@ class Sprite
         file.rawWrite(colours);
         file.rawWrite(glyphs);
         
-        file.rawWrite(bgColours);
-        
         return true;
     }
     
-    auto load(string file)
+    auto load(string fileName)
     {
-        if (!file.exists) return false;
+        auto file = File(fileName, "rb");
+        if (!file) return false;
+
+        width = cast(int) file.rawRead!ubyte();
+        height = cast(int) file.rawRead!ubyte();
+        auto length = width * height;
+
+        m_Colours.length = nWidth * nHeight;
+        file.rawRead(m_Colours);
+
+        m_Glyphs.length = nWidth * nHeight;
+        file.rawRead(m_Glyphs);
+
+        return true;
     }
 }
