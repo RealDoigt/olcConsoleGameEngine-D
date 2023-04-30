@@ -74,6 +74,7 @@ http://www.twitch.tv/javidx9
 
 module olc_console_game_engine;
 import arsd.terminal;
+import std.file;
 
 enum BLACK        = 0;
 enum DARK_BLUE    = BLUE_BIT;
@@ -97,4 +98,138 @@ enum PIXEL : char
     THREEQUARTERS = '▓',
     HALF          = '▒',
     QUARTER       = '░'
+}
+
+class Sprite
+{
+    this(){}
+    
+    this(int w, int h)
+    {
+        create(w, h);
+    }
+    
+    this (string file)
+    {
+        if (!load(file)) Create(8, 8);
+    }
+    
+    int width, height;
+    
+    private
+    {
+        char[] glyphs;
+        short[] colours;
+        short[] bgColours;
+        
+        void create(int w, int h)
+        {
+            width = w;
+            height = h;
+            
+            int length = w * h;
+            
+            glyphs = new char[](length);
+            colours = new short[](length);
+            bgColours = new short[](length);
+            
+            for (int i; i < length; ++i)
+                glyphs[i] = ' ';
+        }
+    }
+    
+    void setGlyph(int x, int y, char c)
+    {
+        if (x < 0 || x >= width || y < 0 || y >= height) 
+            return;
+            
+        glyphs[y * width + x] = c;
+    }
+    
+    void setColour(int x, int y, short c)
+    {
+        if (x < 0 || x >= width || y < 0 || y >= height) 
+            return;
+            
+        colours[y * width + x] = c;
+    }
+    
+    void setBGColour(int x, int y, short c)
+    {
+        if (x < 0 || x >= width || y < 0 || y >= height) 
+            return;
+            
+        bgColours[y * width + x] = c;
+    }
+    
+    auto getGlyph(int x, int y)
+    {
+        if (x < 0 || x >= width || y < 0 || y >= height) 
+            return ' ';
+            
+        return glyphs[y * width + x];
+    }
+    
+    auto getColour(int x, int y)
+    {
+        if (x < 0 || x >= width || y < 0 || y >= height) 
+            return BLACK;
+            
+        return colours[y * width + x];
+    }
+    
+    auto getBGColour(int x, int y)
+    {
+        if (x < 0 || x >= width || y < 0 || y >= height) 
+            return BLACK;
+            
+        return bgColours[y * width + x];
+    }
+    
+    auto sampleGlyph(float x, float y)
+    {
+        int sx = cast(int)(x * cast(float)width),
+            sy = cast(int)(y * cast(float)height - 1f);
+            
+        if (sx < 0 || sx >= width || sy < 0 || sy >= height)
+            return ' ';
+            
+        return glyphs[sy * width + sx];
+    }
+    
+    auto sampleColour(float x, float y)
+    {
+        int sx = cast(int)(x * cast(float)width),
+            sy = cast(int)(y * cast(float)height - 1f);
+            
+        if (sx < 0 || sx >= width || sy < 0 || sy >= height)
+            return BLACK;
+            
+        return colours[sy * width + sx];
+    }
+    
+    auto sampleBGColour(float x, float y)
+    {
+        int sx = cast(int)(x * cast(float)width),
+            sy = cast(int)(y * cast(float)height - 1f);
+            
+        if (sx < 0 || sx >= width || sy < 0 || sy >= height)
+            return BLACK;
+            
+        return bgColours[sy * width + sx];
+    }
+    
+    void save(string file)
+    {
+        file.write(width);
+        file.append(height);
+        file.append(glyphs);
+        file.append(colours);
+        file.append(bgColours);
+    }
+    
+    auto load(string file)
+    {
+        if (!file.exists) return false;
+    }
 }
