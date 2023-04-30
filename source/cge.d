@@ -90,3 +90,11 @@ enum RED          = DARK_RED     | Bright;
 enum MAGENTA      = DARK_MAGENTA | Bright;
 enum YELLOW       = DARK_YELLOW  | Bright;
 enum WHITE        = GREY         | Bright;
+
+enum PIXEL : char
+{
+    SOLID         = '█',
+    THREEQUARTERS = '▓',
+    HALF          = '▒',
+    QUARTER       = '░'
+}
