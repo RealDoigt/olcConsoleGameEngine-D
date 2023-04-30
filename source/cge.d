@@ -213,11 +213,8 @@ class Sprite
         height = cast(int) file.rawRead!ubyte();
         auto length = width * height;
 
-        colours = new short[](length);
-        glyphs = new char[](length);
-        
-        file.rawRead(colours);
-        file.rawRead(glyphs);
+        colours = file.rawRead(new short[](length));
+        glyphs = file.rawRead(new char[](length));
 
         return true;
     }
