@@ -93,7 +93,7 @@ enum MAGENTA      = DARK_MAGENTA | Bright;
 enum YELLOW       = DARK_YELLOW  | Bright;
 enum WHITE        = GREY         | Bright;
 
-enum PIXEL : char
+enum PIXEL : wchar
 {
     SOLID         = '█',
     THREEQUARTERS = '▓',
@@ -119,7 +119,7 @@ class Sprite
     
     private
     {
-        char[] glyphs;
+        wchar[] glyphs;
         short[] colours;
         
         void create(int w, int h)
@@ -129,7 +129,7 @@ class Sprite
             
             int length = w * h;
             
-            glyphs = new char[](length);
+            glyphs = new wchar[](length);
             colours = new short[](length);
             
             for (int i; i < length; ++i)
@@ -137,7 +137,7 @@ class Sprite
         }
     }
     
-    void setGlyph(int x, int y, char c)
+    void setGlyph(int x, int y, wchar c)
     {
         if (x < 0 || x >= width || y < 0 || y >= height) 
             return;
@@ -191,30 +191,27 @@ class Sprite
         return colours[sy * width + sx];
     }
     
-    auto save(string fileName)
+    void save(string fileName)
     {
         auto file = File(fileName, "wb");
-        if (!file) return false;
         
-        file.rawWrite(to!ubyte(width));
-        file.rawWrite(to!ubyte(height));
+        file.rawWrite([width]);
+        file.rawWrite([height]);
         file.rawWrite(colours);
         file.rawWrite(glyphs);
-        
-        return true;
     }
     
     auto load(string fileName)
     {
         auto file = File(fileName, "rb");
-        if (!file) return false;
+        if (!fileName.exists) return false;
 
-        width = cast(int) file.rawRead!ubyte();
-        height = cast(int) file.rawRead!ubyte();
+        width = file.rawRead(new int[](1))[0];
+        height = file.rawRead(new int[](1))[0];
         auto length = width * height;
 
         colours = file.rawRead(new short[](length));
-        glyphs = file.rawRead(new char[](length));
+        glyphs = file.rawRead(new wchar[](length));
 
         return true;
     }
