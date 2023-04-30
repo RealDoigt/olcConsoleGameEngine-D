@@ -74,3 +74,19 @@ http://www.twitch.tv/javidx9
 
 module olc_console_game_engine;
 import arsd.terminal;
+
+enum BLACK        = 0;
+enum DARK_BLUE    = BLUE_BIT;
+enum DARK_GREEN   = GREEN_BIT;
+enum DARK_CYAN    = DARK_BLUE    | DARK_GREEN;
+enum DARK_RED     = RED_BIT;
+enum DARK_MAGENTA = DARK_BLUE    | DARK_RED;
+enum DARK_YELLOW  = DARK_RED     | DARK_GREEN;
+enum GREY         = DARK_BLUE    | DARK_GREEN | DARK_RED;
+enum DARK_GREY    = BLACK        | Bright;
+enum BLUE         = DARK_BLUE    | Bright;
+enum GREEN        = DARK_GREEN   | Bright;
+enum RED          = DARK_RED     | Bright;
+enum MAGENTA      = DARK_MAGENTA | Bright;
+enum YELLOW       = DARK_YELLOW  | Bright;
+enum WHITE        = GREY         | Bright;
