@@ -4,6 +4,9 @@
 		"Doigt"
 	],
 	"copyright": "Copyright (c) 2018 Javidx9",
+	"dependencies": {
+		"arsd-official:terminal": "~>10.9.10"
+	},
 	"description": "D port of olcConsoleGameEngine",
 	"license": "One Lone Coder License",
 	"name": "cge-d"
