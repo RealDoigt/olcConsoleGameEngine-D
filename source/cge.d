@@ -75,6 +75,7 @@ http://www.twitch.tv/javidx9
 module olc_console_game_engine;
 import arsd.terminal;
 import std.file;
+import std.conv;
 
 enum BLACK        = 0;
 enum DARK_BLUE    = BLUE_BIT;
@@ -219,13 +220,20 @@ class Sprite
         return bgColours[sy * width + sx];
     }
     
-    void save(string file)
+    auto save(string fileName)
     {
-        file.write(width);
-        file.append(height);
-        file.append(glyphs);
-        file.append(colours);
-        file.append(bgColours);
+        auto file = File(fileName, "wb");
+        
+        if (!file) return false;
+        
+        file.rawWrite(to!ubyte(width));
+        file.rawWrite(to!ubyte(height));
+        file.rawWrite(colours);
+        file.rawWrite(glyphs);
+        
+        file.rawWrite(bgColours);
+        
+        return true;
     }
     
     auto load(string file)
