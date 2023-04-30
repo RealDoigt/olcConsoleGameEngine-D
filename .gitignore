@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+cge-d
+cge-d.so
+cge-d.dylib
+cge-d.dll
+cge-d.a
+cge-d.lib
+cge-d-test-*
+*.exe
+*.o
+*.obj
+*.lst
