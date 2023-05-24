@@ -216,3 +216,8 @@ class Sprite
         return true;
     }
 }
+
+class ConsoleGameEngine
+{
+
+}
